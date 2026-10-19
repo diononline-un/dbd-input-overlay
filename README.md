@@ -128,7 +128,7 @@ Dieses Projekt kombiniert einen schlanken evdev-Reader mit einer GTK4-Layer-Shel
 
 ## Anti-Cheat
 
-Das Programm liest ausschließlich Kernel-Eingabeereignisse und zeichnet ein separates Overlay-Fenster. Es injiziert nichts in den Spielprozess, liest keinen Spielspeicher und sendet keine Eingaben ans Spiel. Das entspricht dem üblichen Vorgehen von Streaming-Overlays. Eine Garantie für EAC-Verhalten gibt es trotzdem nicht.
+Das Programm liest ausschließlich Kernel-Eingabeereignisse und zeichnet ein separates Overlay-Fenster. Es injiziert nichts in den Spielprozess, liest keinen Spielspeicher und sendet keine Eingaben ans Spiel. Es verarbeitet nur die oben genannten Tastencodes, schreibt keine Logs und hat keine Netzwerkfunktion. Das entspricht dem üblichen Vorgehen von Streaming-Overlays. Eine Garantie für EAC-Verhalten gibt es trotzdem nicht.
 
 ## Entwicklung
 
