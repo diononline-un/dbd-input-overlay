@@ -15,6 +15,6 @@ next_steps:
 # Aktueller Stand
 - Layer-Shell-Overlay oben rechts, klick-durchlässig, über DBD-Vollbild sichtbar (KWin 6.8)
 - evdev-Reader für Keychron V5 und YJX-Maus, inkl. Seitentasten und Bewegungsrichtung
-- Demo-Modus, Konfiguration, Geräteauswahl, 35 Unit-Tests
+- Demo-Modus, Konfiguration, Geräteauswahl, 36 Unit-Tests
 - GPU Screen Recorder Monitor-Capture enthält das Overlay
 - Offen: Systempaket, Live-Input-Test, finale Abnahme

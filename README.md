@@ -137,7 +137,7 @@ python -m unittest discover -s tests -v
 ./run.sh --demo
 ```
 
-Die Kernlogik (Tastenzustand, Geräte-Mapping, Layout, Konfiguration) ist mit 35 Unit-Tests abgedeckt. Die Darstellung wurde mit DBD im Vollbild und GPU Screen Recorder verifiziert.
+Die Kernlogik (Tastenzustand, Geräte-Mapping, Layout, Konfiguration) ist mit 36 Unit-Tests abgedeckt. Die Darstellung wurde mit DBD im Vollbild und GPU Screen Recorder verifiziert.
 
 ## Bekannte Grenzen
 

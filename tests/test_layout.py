@@ -29,6 +29,14 @@ class LayoutTests(unittest.TestCase):
         self.assertAlmostEqual(small.window_width, normal.window_width * 0.8, places=3)
         self.assertAlmostEqual(small.window_height, normal.window_height * 0.8, places=3)
 
+    def test_mouse_parts_fit_when_numbers_hidden(self):
+        layout = build_layout(scale=1.0, show_numbers=False, show_mouse=True)
+
+        parts = [layout.mouse_body, *layout.mouse_sides.values()]
+        for rect in parts:
+            with self.subTest(rect=rect):
+                self.assertLessEqual(rect.y + rect.h, layout.card_height)
+
     def test_mouse_can_be_hidden(self):
         with_mouse = build_layout(scale=1.0, show_numbers=True, show_mouse=True)
         without = build_layout(scale=1.0, show_numbers=True, show_mouse=False)

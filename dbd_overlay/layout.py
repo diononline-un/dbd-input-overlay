@@ -69,6 +69,7 @@ def build_layout(scale: float = 1.0, show_numbers: bool = True, show_mouse: bool
     y += KEY
 
     card_height = y + PAD
+    mouse_top = PAD if show_numbers else 6.0
 
     mouse_body = None
     mouse_sides: dict[str, Rect] = {}
@@ -77,13 +78,15 @@ def build_layout(scale: float = 1.0, show_numbers: bool = True, show_mouse: bool
     if show_mouse:
         mouse_x = PAD + left_width + MOUSE_GAP
         compass_radius = 13.0
-        compass_center = (mouse_x + MOUSE_W / 2, PAD + compass_radius + 2)
+        compass_center = (mouse_x + MOUSE_W / 2, mouse_top + compass_radius + 2)
         body_x = mouse_x + (MOUSE_W - 24) / 2
-        mouse_body = Rect(body_x, PAD + 34, 24, 32)
+        mouse_body = Rect(body_x, mouse_top + 34, 24, 32)
         mouse_sides = {
-            "M4": Rect(mouse_x + 1, PAD + 70, 18, 10),
-            "M5": Rect(mouse_x + MOUSE_W - 19, PAD + 70, 18, 10),
+            "M4": Rect(mouse_x + 1, mouse_top + 70, 18, 10),
+            "M5": Rect(mouse_x + MOUSE_W - 19, mouse_top + 70, 18, 10),
         }
+        side_bottom = max(rect.y + rect.h for rect in mouse_sides.values())
+        card_height = max(card_height, side_bottom + 4.0)
 
     if scale != 1.0:
         def scaled(rect: Rect) -> Rect:
