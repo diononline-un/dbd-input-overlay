@@ -1,0 +1,21 @@
+# Monitor connector, see `kscreen-doctor -o`
+output = "DP-1"
+
+# 1.0 gives a 234 x 119 px window at 1440p
+scale = 1.0
+
+# Distance from the top-right screen corner in pixels
+margin = 16
+
+# 0.0 = only keycaps, 1.0 = solid card
+panel_alpha = 0.28
+
+accent = "#c2414b"
+font = "Sans"
+
+show_numbers = true
+show_mouse = true
+
+# Optional device filters, matched against the evdev device name
+# keyboard_device = "Keychron"
+# mouse_device = "YJX"
