@@ -1,6 +1,10 @@
 # Monitor connector, see `kscreen-doctor -o`
 output = "DP-1"
 
+# top-left, top-center, top-right, center-left, center,
+# center-right, bottom-left, bottom-center, bottom-right
+anchor = "top-right"
+
 # 1.0 gives a 234 x 119 px window at 1440p
 scale = 1.0
 

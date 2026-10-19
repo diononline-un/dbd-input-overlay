@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import json
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
+
+from .position import ANCHORS
 
 
 @dataclass
 class Config:
     output: str = ""
+    anchor: str = "top-right"
     scale: float = 1.0
     margin: int = 16
     panel_alpha: float = 0.28
@@ -35,6 +39,9 @@ def load_config(path: Path) -> Config:
     cfg = Config()
     if "output" in data:
         cfg.output = str(data["output"])
+    if "anchor" in data:
+        anchor = str(data["anchor"])
+        cfg.anchor = anchor if anchor in ANCHORS else "top-right"
     if "scale" in data:
         cfg.scale = _clamp(float(data["scale"]), 0.6, 2.0)
     if "margin" in data:
@@ -54,3 +61,23 @@ def load_config(path: Path) -> Config:
     if "keyboard_device" in data:
         cfg.keyboard_device = str(data["keyboard_device"])
     return cfg
+
+
+def save_config(path: Path, cfg: Config) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lines = [
+        f"output = {json.dumps(cfg.output)}",
+        f"anchor = {json.dumps(cfg.anchor)}",
+        f"scale = {cfg.scale:g}",
+        f"margin = {cfg.margin}",
+        f"panel_alpha = {cfg.panel_alpha:g}",
+        f"accent = {json.dumps(cfg.accent)}",
+        f"font = {json.dumps(cfg.font)}",
+        f"show_numbers = {str(cfg.show_numbers).lower()}",
+        f"show_mouse = {str(cfg.show_mouse).lower()}",
+        f"mouse_device = {json.dumps(cfg.mouse_device)}",
+        f"keyboard_device = {json.dumps(cfg.keyboard_device)}",
+    ]
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    temporary.replace(path)

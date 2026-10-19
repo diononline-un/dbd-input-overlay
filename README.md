@@ -4,7 +4,9 @@ Kleines, transparentes Input-Overlay für Dead by Daylight unter KDE Plasma Wayl
 
 ![Vorschau](docs/preview.png)
 
-Das Overlay liegt als Layer-Shell-Fläche oben rechts über dem Spiel, nimmt keinen Fokus und lässt Mausklicks durch. Es liest Tastatur und Maus direkt aus `/dev/input/event*`, ohne Root, ohne Injection und ohne Zugriff auf den Spielprozess. GPU Screen Recorder nimmt es bei einer Monitor-Aufnahme mit auf.
+Das Overlay liegt als Layer-Shell-Fläche über dem Spiel, nimmt keinen Fokus und lässt Mausklicks durch. Ein kleines X oben rechts beendet es. Die Einstellungen laufen in einem eigenen GTK-Fenster, das ebenfalls über dem Vollbildspiel liegt. Das Overlay liest Tastatur und Maus direkt aus `/dev/input/event*`, ohne Root, ohne Injection und ohne Zugriff auf den Spielprozess. GPU Screen Recorder nimmt es bei einer Monitor-Aufnahme mit auf.
+
+![Einstellungen](docs/settings-preview.png)
 
 ## Funktionen
 
@@ -12,8 +14,10 @@ Das Overlay liegt als Layer-Shell-Fläche oben rechts über dem Spiel, nimmt kei
 - Maus: links, rechts, Mitte, Zurück/Vorwärts (M4/M5)
 - Mausbewegungsrichtung als kleiner Kompass mit auslaufendem Zeiger
 - Mausrad-Richtung als kurzer Pfeil
-- Klick-durchlässig, kein Fokusklau
-- Konfigurierbare Größe, Transparenz und Akzentfarbe
+- Einstellungs-GUI für Monitor, Position, Größe, Farbe und Transparenz
+- Neun Ankerpositionen plus Randabstand
+- Klick-durchlässig bis auf das kleine X zum Beenden
+- Kein Fokusklau, kein Tray
 - Demo-Modus ohne Spiel
 - Kein Root, kein Spiel-Hook
 
@@ -42,21 +46,41 @@ Danach neu einloggen.
 ./run.sh
 ```
 
+Beim Start öffnet sich zusätzlich das Einstellungsfenster. Schließen mit `×` oder `Escape`, das Overlay läuft weiter. Ein erneuter Start über das Anwendungsmenü öffnet die Einstellungen wieder.
+
+Nur das Overlay, ohne Einstellungsfenster:
+
+```bash
+./run.sh --no-settings
+```
+
 Ohne Spiel testen:
 
 ```bash
 ./run.sh --demo
 ```
 
-Overlay beenden: `Strg+C` im Terminal oder
+Overlay beenden: Klick auf das kleine `×` oben rechts im Overlay, `Strg+C` im Terminal oder
 
 ```bash
 pkill -f 'dbd_overlay'
 ```
 
+Im Einstellungsfenster beendet der Knopf „Beenden“ die App komplett.
+
+## Einstellungen
+
+- Monitor: „Aktiver Monitor“, `DP-1`, `DP-2`, `HDMI-A-1`
+- Position: 3x3-Raster mit neun Ankern, plus Randabstand
+- Größe: Scale von 0.6 bis 2.0
+- Farbe: zehn Presets oder freier Hex-Wert, plus Panel-Deckkraft
+- Anzeige: Zahlenreihe und Mauscluster ein- oder ausblenden
+
+Änderungen werden live übernommen und automatisch in `~/.config/dbd-input-overlay/config.toml` gespeichert. Das Einstellungsfenster liegt als Layer-Shell-Fläche über dem Spiel und erscheint deshalb auch in Aufnahmen, solange es offen ist.
+
 ## Monitor wählen
 
-Standardmäßig landet das Overlay auf dem aktiven Monitor. Für DBD auf einem anderen Monitor:
+Standardmäßig landet das Overlay auf dem aktiven Monitor. Monitor im Einstellungsfenster wählen oder per CLI:
 
 ```bash
 ./run.sh --output DP-2
@@ -82,6 +106,7 @@ gpu-screen-recorder -w DP-1 -o dbd.mp4 -f 60 -a default_output -c mp4
 
 ```toml
 output = "DP-1"
+anchor = "top-right"
 scale = 1.0
 margin = 16
 panel_alpha = 0.28
@@ -95,10 +120,13 @@ show_mouse = true
 # mouse_device = "YJX"
 ```
 
-CLI-Optionen überschreiben die Datei:
+Anker: `top-left`, `top-center`, `top-right`, `center-left`, `center`, `center-right`, `bottom-left`, `bottom-center`, `bottom-right`.
+
+CLI-Optionen überschreiben die Datei, werden aber nicht gespeichert:
 
 ```bash
 ./run.sh --scale 0.85 --panel-alpha 0.2 --no-numbers
+./run.sh --anchor bottom-left --margin 24
 ./run.sh --list-devices
 ```
 
@@ -137,11 +165,12 @@ python -m unittest discover -s tests -v
 ./run.sh --demo
 ```
 
-Die Kernlogik (Tastenzustand, Geräte-Mapping, Layout, Konfiguration) ist mit 36 Unit-Tests abgedeckt. Die Darstellung wurde mit DBD im Vollbild und GPU Screen Recorder verifiziert.
+Die Kernlogik (Tastenzustand, Geräte-Mapping, Layout, Anker, Konfiguration) ist mit 43 Unit-Tests abgedeckt. Overlay, Einstellungsfenster, Live-Rebuild, DBD-Vollbild und GPU Screen Recorder wurden manuell verifiziert.
 
 ## Bekannte Grenzen
 
 - Nur KDE Plasma Wayland mit Layer-Shell. GNOME funktioniert nicht.
 - Es wird ein Mauszeiger-Gerät gelesen. Bei mehreren Mäusen per `mouse_device` auswählen.
-- Kein Tray. Start und Stop erfolgen über Kommando oder Desktop-Launcher.
+- Kein Tray. Start und Stop erfolgen über Kommando, Anwendungsmenü oder das X im Overlay.
+- Das Einstellungsfenster erscheint in Aufnahmen, solange es offen ist.
 - Direct-Scanout kann das Overlay in seltenen Fällen verdecken. Falls das passiert, DBD im randlosen Fenstermodus starten.

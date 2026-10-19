@@ -37,6 +37,17 @@ class LayoutTests(unittest.TestCase):
             with self.subTest(rect=rect):
                 self.assertLessEqual(rect.y + rect.h, layout.card_height)
 
+    def test_close_button_fits_inside_card(self):
+        for numbers in (True, False):
+            for mouse in (True, False):
+                layout = build_layout(scale=1.0, show_numbers=numbers, show_mouse=mouse)
+                rect = layout.close_button
+                with self.subTest(numbers=numbers, mouse=mouse):
+                    self.assertGreaterEqual(rect.x, 0)
+                    self.assertLessEqual(rect.x + rect.w, layout.card_width)
+                    self.assertGreaterEqual(rect.y, 0)
+                    self.assertLessEqual(rect.y + rect.h, layout.card_height)
+
     def test_mouse_can_be_hidden(self):
         with_mouse = build_layout(scale=1.0, show_numbers=True, show_mouse=True)
         without = build_layout(scale=1.0, show_numbers=True, show_mouse=False)

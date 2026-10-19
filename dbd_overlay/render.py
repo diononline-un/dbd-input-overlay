@@ -39,6 +39,7 @@ class OverlayRenderer:
         self.layout = layout
         self.scale = scale
         self.accent = parse_hex_color(config.accent)
+        self.hover_close = False
         self._anim = {name: 0.0 for name in layout.keycaps}
         self._anim.update({name: 0.0 for name in ("M1", "M2", "M3", "M4", "M5")})
 
@@ -65,7 +66,26 @@ class OverlayRenderer:
             self._draw_key(cr, label, rect)
         if self.layout.mouse_body is not None:
             self._draw_mouse(cr)
+        self._draw_close(cr)
         cr.restore()
+
+    def _draw_close(self, cr: cairo.Context) -> None:
+        rect = self.layout.close_button
+        if self.hover_close:
+            _rounded_rect(cr, rect.x - 3, rect.y - 3, rect.w + 6, rect.h + 6, 4)
+            cr.set_source_rgba(1, 1, 1, 0.10)
+            cr.fill()
+
+        color = (*self.accent, 0.95) if self.hover_close else (1, 1, 1, 0.42)
+        cr.set_source_rgba(*color)
+        cr.set_line_width(1.25)
+        cr.set_line_cap(cairo.LINE_CAP_ROUND)
+        pad = 3.2
+        cr.move_to(rect.x + pad, rect.y + pad)
+        cr.line_to(rect.x + rect.w - pad, rect.y + rect.h - pad)
+        cr.move_to(rect.x + rect.w - pad, rect.y + pad)
+        cr.line_to(rect.x + pad, rect.y + rect.h - pad)
+        cr.stroke()
 
     def _draw_panel(self, cr: cairo.Context) -> None:
         if self.config.panel_alpha <= 0.001:

@@ -23,6 +23,7 @@ class Layout:
     mouse_sides: dict[str, Rect]
     compass_center: tuple[float, float]
     compass_radius: float
+    close_button: Rect
 
 
 PAD = 10.0
@@ -88,6 +89,8 @@ def build_layout(scale: float = 1.0, show_numbers: bool = True, show_mouse: bool
         side_bottom = max(rect.y + rect.h for rect in mouse_sides.values())
         card_height = max(card_height, side_bottom + 4.0)
 
+    close_button = Rect(card_width - 18.0, 6.0, 12.0, 12.0)
+
     if scale != 1.0:
         def scaled(rect: Rect) -> Rect:
             return Rect(rect.x * scale, rect.y * scale, rect.w * scale, rect.h * scale)
@@ -98,6 +101,7 @@ def build_layout(scale: float = 1.0, show_numbers: bool = True, show_mouse: bool
         mouse_sides = {name: scaled(rect) for name, rect in mouse_sides.items()}
         compass_center = (compass_center[0] * scale, compass_center[1] * scale)
         compass_radius *= scale
+        close_button = scaled(close_button)
         card_width *= scale
         card_height *= scale
 
@@ -112,4 +116,5 @@ def build_layout(scale: float = 1.0, show_numbers: bool = True, show_mouse: bool
         mouse_sides=mouse_sides,
         compass_center=compass_center,
         compass_radius=compass_radius,
+        close_button=close_button,
     )
